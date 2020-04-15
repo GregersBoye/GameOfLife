@@ -1,0 +1,19 @@
+{
+  "name": "game_of_life",
+  "version": "1.0.0",
+  "description": "An implementation of Conways game of life. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GregersBoye/GameOfLife.git"
+  },
+  "author": "gbj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GregersBoye/GameOfLife/issues"
+  },
+  "homepage": "https://github.com/GregersBoye/GameOfLife#readme"
+}
