@@ -1,4 +1,6 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
@@ -16,8 +18,17 @@ module.exports = {
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/public/index.html"
+    }),
+    new CleanWebpackPlugin(),
+    new CopyPlugin([
+      {from: './src/resources', to: './resources/'}
+      ])
+  ],
   output: {
-    filename: 'bundle.js',
+    filename: 'bundle.[contentHash].js',
     path: path.resolve(__dirname, 'dist'),
   },
 };
