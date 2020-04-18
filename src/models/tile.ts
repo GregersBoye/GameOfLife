@@ -1,26 +1,41 @@
-export default class Tile{
+import _ from 'lodash';
+
+export default class Tile {
     neighbours: number;
     isAlive: boolean;
+    _nextState: boolean;
 
-    constructor(initialState: boolean) {
+    constructor() {
+        const initialState = _.random(0, 1) > 0;
+
         this.neighbours = 0;
         this.isAlive = initialState;
+        this._nextState = initialState;
     }
 
-    get isAliveNextGeneration(){
-        if(this.neighbours == 3){
+    _calculateNextState() {
+        if (this.neighbours == 3) {
             return true;
         }
 
-        if(this.isAlive && this.neighbours == 2){
+        // noinspection RedundantIfStatementJS
+        if (this.isAlive && this.neighbours == 2) {
             return true;
         }
 
         return false;
     }
 
-    toString(){
-        return this.isAlive ? "*" : "O";
+    setNextState(){
+        this._nextState = this._calculateNextState();
+    }
+
+    updateToNextGeneration(){
+        this.isAlive = this._nextState;
+    }
+
+    toString() {
+        return this.isAlive ? '*' : 'O';
     }
 }
 

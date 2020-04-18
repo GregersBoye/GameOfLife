@@ -1,4 +1,13 @@
 import {Board} from './models/board';
+import Tile from "./models/tile";
 
 const board = new Board(10,10);
-console.log(board.toString());
+let i: number = 0;
+board.runGeneration();
+console.log(++i);
+board.runGeneration();
+console.log(++i);
+board.runGeneration();
+console.log(++i);
+board.runGeneration();
+console.log(++i);
