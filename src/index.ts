@@ -1,9 +1,11 @@
 import * as PIXI from 'pixi.js';
+import 'bulma/css/bulma.css'
 import Board from './models/board';
 import Tile from './models/tile';
 
 const padding: number = 3;
-const count: number = 50;
+const count: number = 30;
+let runner : any = null;
 // The application will create a renderer using WebGL, if possible,
 // with a fallback to a canvas render. It will also setup the ticker
 // and the root stage PIXI.Container
@@ -15,16 +17,21 @@ const app = new PIXI.Application({
 
 // The application will create a canvas element for you that you
 // can then insert into the DOM
-document.body.appendChild(app.view);
+var canvasElement = document.getElementById('root');
 
+if(canvasElement) {
+    canvasElement.appendChild(app.view);
+}
 // load the texture we need
 PIXI.Loader.shared.add("./resources/graphics/sprites.json").load(setup);
 
 function random(low: number, high: number) {
     return Math.random() * (high - low) + low
 }
-let board : Board;
-let sheet : any;
+
+let board: Board;
+let sheet: any;
+
 function setup() {
     board = new Board(count, count)
     // set speed, start playback and add it to the stage
@@ -39,12 +46,10 @@ function setup() {
         tile.sprite = sprite;
         tile.sprite.visible = tile.isAlive
         newSprite(sprite, row, column);
-    })
-
+    });
 }
 
-function switchGeneration(){
-console.log("switching generation");
+function switchGeneration() {
     board.runGeneration(true);
 
     board.traverse((tile: Tile, row: number, col: number) => {
@@ -80,10 +85,27 @@ console.log("switching generation");
         // tile.updateToNextGeneration();
     });
 }
+
 let generationBtn = document.getElementById('generationBtn');
 
-if(generationBtn) {
-    generationBtn.addEventListener('click', () => {window.setInterval(switchGeneration, 100);});
+if (generationBtn) {
+    generationBtn.addEventListener('click', () => {
+        if (runner == null) {
+            console.log('starting');
+
+            runner = window.setInterval(switchGeneration, 100);
+        }
+    });
+}
+
+let stopBtn = document.getElementById('stopBtn');
+if(stopBtn){
+    stopBtn.addEventListener('click', () => {
+        if(runner) {
+            window.clearInterval(runner);
+            runner = null;
+        }
+    })
 }
 
 

@@ -1,19 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>
         Conway's game of life
     </title>
 </head>
 
 <body>
-<div id="root"></div>
+<div class="container">
+    <div class="hero">
+        <h2 class="title">Conway's game of life</h2>
+        <h2 class="subtitle">
+            A game of life and death - <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Wikipedia</a>
+        </h2>
+    </div>
 
-<button id="generationBtn">Go!</button>
-<button id="resetBtn">Reset!</button>
+    <div class="columns is-multiline">
+        <div class="column is-full">
+            <div id="root"></div>
+        </div>
+
+        <div class="column is-full">
+            <button class="button is-primary" id="generationBtn">Start</button>
+            <button class="button is-primary" id="stopBtn">Stop</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

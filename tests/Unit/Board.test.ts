@@ -90,7 +90,7 @@ describe('Board', () => {
             const board : Board = new Board(3,3);
 
             const result = board._getBounds(2, board.rowCount);
-            expect(result).to.eql([1,2]);
+            expect(result).to.eql([3,2]);
         });
 
         it('can return the correct bound at the lower limit', () => {
