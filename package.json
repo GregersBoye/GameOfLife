@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "demo": "tsc --p ./tsconfig.json; node ./dist/demo.js",
-    "lint": "./node_modules/.bin/eslint ./src/**/*.ts -f table; exit 0",
+    "lint": "./node_modules/.bin/eslint ./src/**/*.ts -f table",
     "lint-fix": "./node_modules/.bin/eslint ./src/**/*.ts -f table --fix;exit 0",
     "build": "webpack --config ./webpack.config.js --mode production",
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",

@@ -93,7 +93,7 @@ if (generationBtn) {
         if (runner == null) {
             console.log('starting');
 
-            runner = window.setInterval(switchGeneration, 100);
+            runner = window.setInterval(switchGeneration, 100)
         }
     });
 }
