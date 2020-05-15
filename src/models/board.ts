@@ -14,8 +14,8 @@ export default class Board {
             }
             this.columns.push(newCol);
         }
-        this.rowCount = width
-        this.colCount = height
+        this.rowCount = width;
+        this.colCount = height;
     }
 
     toString() {
