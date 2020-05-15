@@ -1,11 +1,17 @@
 import * as PIXI from 'pixi.js';
+import {Board} from './models/board';
+import Tile from './models/tile';
 
-const padding : number= 3;
+const padding: number = 3;
 const count: number = 50;
 // The application will create a renderer using WebGL, if possible,
 // with a fallback to a canvas render. It will also setup the ticker
 // and the root stage PIXI.Container
-const app = new PIXI.Application({'backgroundColor': 0xffffff, 'width': (12 + padding) * count + padding, 'height': (10 + padding) * count + padding });
+const app = new PIXI.Application({
+    'backgroundColor': 0xff0ff0,
+    'width': (12 + padding) * count + padding,
+    'height': (10 + padding) * count + padding
+});
 
 // The application will create a canvas element for you that you
 // can then insert into the DOM
@@ -14,29 +20,74 @@ document.body.appendChild(app.view);
 // load the texture we need
 PIXI.Loader.shared.add("./resources/graphics/sprites.json").load(setup);
 
+function random(low: number, high: number) {
+    return Math.random() * (high - low) + low
+}
+
 function setup() {
+
+    const board = new Board(10, 10);
     // set speed, start playback and add it to the stage
     let sheet = PIXI.Loader.shared.resources["./resources/graphics/sprites.json"].spritesheet;
 
-    if (sheet === undefined) {
-        return;
-    }
-
-
-    for (let y: number = 0; y < count; y++) {
-        for (let x: number = 0; x < count; x++) {
-            let blop = new PIXI.AnimatedSprite(sheet.animations["idle"]);
-            newSprite(blop, x, y);
-
+    board.traverse((tile: Tile, row: number, column: number) => {
+        if (sheet === undefined) {
+            return;
         }
-    }
+
+        let sprite = new PIXI.AnimatedSprite(sheet.animations["idle"]);
+        tile.sprite = sprite;
+        tile.sprite.visible = tile.isAlive
+        newSprite(sprite, row, column);
+    })
+
+    board.traverse((tile: Tile, row: number, column: number) => {
+        tile.neighbours = board.countNeighbours(row, column);
+        tile.setNextState();
+    });
+
+    board.traverse((tile: Tile, row: number, col: number) => {
+        // console.log(`Traversing for tile [${row}, ${col}], tile is alive: ${tile.isAlive}`);
+        //no change, do nothing more
+        if (tile.getNextState() == tile.isAlive) {
+            return;
+        }
+        if (sheet == undefined) {
+            return;
+        }
+
+        try{
+        //Tile spawns new life
+        if (tile.getNextState()) {
+            tile.sprite.visible = true;
+            tile.sprite.texture = sheet.animations["idle"];
+            tile.sprite.loop = true;
+        }
+
+        if (!tile.getNextState()) {
+            tile.sprite.loop = false;
+            tile.sprite.texture = sheet.animations["death"];
+            tile.sprite.onComplete(() => {
+                tile.sprite.visible = false
+            });
+        }
+
+        }catch (e) {
+            var state = tile.isAlive ? 'alive' : 'dead';
+            // console.log(`we died on sprite [${row};${col}] (${state}), because ${e.message}`);
+        }
+
+        tile.updateToNextGeneration();
+    });
 }
 
-function newSprite(sprite: any, xPos: number, yPos: number) {
-    sprite.animationSpeed = 0.2;
 
-    sprite.x = xPos * (12+padding)+padding;
-    sprite.y = yPos * (10+padding)+padding;
-    sprite.play();
+function newSprite(sprite: any, xPos: number, yPos: number) {
+    // console.log(sprite);
+    sprite.animationSpeed = 0.2;
+    const startFrame: number = random(0, 10);
+    sprite.x = xPos * (12 + padding) + padding;
+    sprite.y = yPos * (10 + padding) + padding;
+    sprite.gotoAndPlay(startFrame);
     app.stage.addChild(sprite);
 }

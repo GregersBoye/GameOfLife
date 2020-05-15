@@ -74,6 +74,5 @@ export class Board{
             tile.setNextState();
         });
         this.traverse((tile: Tile) => {tile.updateToNextGeneration();});
-        console.log(this.toString());
     }
 }

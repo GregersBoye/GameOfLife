@@ -4,9 +4,10 @@ export default class Tile {
     neighbours: number;
     isAlive: boolean;
     _nextState: boolean;
+    sprite : any;
 
     constructor() {
-        const initialState = _.random(0, 1) > 0;
+        const initialState = _.random(0, 100) > 60;
 
         this.neighbours = 0;
         this.isAlive = initialState;
@@ -24,6 +25,10 @@ export default class Tile {
         }
 
         return false;
+    }
+
+    getNextState(){
+        return this._nextState;
     }
 
     setNextState(){
