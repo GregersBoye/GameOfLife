@@ -6,9 +6,7 @@ export default class Tile {
     _nextState: boolean;
     sprite : any;
 
-    constructor() {
-        const initialState = _.random(0, 100) > 60;
-
+    constructor(initialState = _.random(0, 100) > 60) {
         this.neighbours = 0;
         this.isAlive = initialState;
         this._nextState = initialState;

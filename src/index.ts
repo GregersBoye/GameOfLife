@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import {Board} from './models/board';
+import Board from './models/board';
 import Tile from './models/tile';
 
 const padding: number = 3;
@@ -8,7 +8,7 @@ const count: number = 50;
 // with a fallback to a canvas render. It will also setup the ticker
 // and the root stage PIXI.Container
 const app = new PIXI.Application({
-    'backgroundColor': 0xff0ff0,
+    'backgroundColor': 0xffffff,
     'width': (12 + padding) * count + padding,
     'height': (10 + padding) * count + padding
 });
@@ -23,12 +23,12 @@ PIXI.Loader.shared.add("./resources/graphics/sprites.json").load(setup);
 function random(low: number, high: number) {
     return Math.random() * (high - low) + low
 }
-
+let board : Board;
+let sheet : any;
 function setup() {
-
-    const board = new Board(10, 10);
+    board = new Board(count, count)
     // set speed, start playback and add it to the stage
-    let sheet = PIXI.Loader.shared.resources["./resources/graphics/sprites.json"].spritesheet;
+    sheet = PIXI.Loader.shared.resources["./resources/graphics/sprites.json"].spritesheet;
 
     board.traverse((tile: Tile, row: number, column: number) => {
         if (sheet === undefined) {
@@ -41,49 +41,53 @@ function setup() {
         newSprite(sprite, row, column);
     })
 
-    board.traverse((tile: Tile, row: number, column: number) => {
-        tile.neighbours = board.countNeighbours(row, column);
-        tile.setNextState();
-    });
+}
+
+function switchGeneration(){
+console.log("switching generation");
+    board.runGeneration(true);
 
     board.traverse((tile: Tile, row: number, col: number) => {
-        // console.log(`Traversing for tile [${row}, ${col}], tile is alive: ${tile.isAlive}`);
         //no change, do nothing more
-        if (tile.getNextState() == tile.isAlive) {
-            return;
-        }
+
+
         if (sheet == undefined) {
             return;
         }
 
-        try{
+        // try{
         //Tile spawns new life
-        if (tile.getNextState()) {
+        if (tile.isAlive) {
             tile.sprite.visible = true;
-            tile.sprite.texture = sheet.animations["idle"];
-            tile.sprite.loop = true;
+            //     tile.sprite.texture = sheet.animations["idle"];
+            //     tile.sprite.loop = true;
         }
-
-        if (!tile.getNextState()) {
-            tile.sprite.loop = false;
-            tile.sprite.texture = sheet.animations["death"];
-            tile.sprite.onComplete(() => {
-                tile.sprite.visible = false
-            });
+        //
+        //Tile dies
+        if (!tile.isAlive) {
+            // tile.sprite.loop = false;
+            // tile.sprite.texture = sheet.animations["death"];
+            // tile.sprite.onComplete(() => {
+            tile.sprite.visible = false
+            // });
         }
+        //
+        //     }catch (e) {
+        //         var state = tile.isAlive ? 'alive' : 'dead';
+        //         // console.log(`we died on sprite [${row};${col}] (${state}), because ${e.message}`);
+        //     }
 
-        }catch (e) {
-            var state = tile.isAlive ? 'alive' : 'dead';
-            // console.log(`we died on sprite [${row};${col}] (${state}), because ${e.message}`);
-        }
-
-        tile.updateToNextGeneration();
+        // tile.updateToNextGeneration();
     });
+}
+let generationBtn = document.getElementById('generationBtn');
+
+if(generationBtn) {
+    generationBtn.addEventListener('click', () => {window.setInterval(switchGeneration, 100);});
 }
 
 
 function newSprite(sprite: any, xPos: number, yPos: number) {
-    // console.log(sprite);
     sprite.animationSpeed = 0.2;
     const startFrame: number = random(0, 10);
     sprite.x = xPos * (12 + padding) + padding;
