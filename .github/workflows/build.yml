@@ -34,7 +34,7 @@ jobs:
       with:
         args: --acl public-read --follow-symlinks --delete
       env:
-        AWS_S3_BUCKET: 's3-bucket-game-of-life'
+        AWS_S3_BUCKET: 'lifegame.gregersboye.dk'
         AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
         AWS_REGION: 'eu-central-1'   # optional: defaults to us-east-1
