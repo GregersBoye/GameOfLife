@@ -30,9 +30,12 @@ jobs:
     - name: Build
       run: npm run build
     - name: Upload S3
-      uses: shallwefootball/upload-s3-action@v1.0.0
+      uses: jakejarvis/s3-sync-action@master
       with:
-        aws_key_id: ${{ secrets.ACCESS_KEY_ID }}
-        aws_secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
-        aws_bucket: s3-bucket-game-of-life
-        source_dir: dist/
+        args: --acl public-read --follow-symlinks --delete
+      env:
+        AWS_S3_BUCKET: 's3-bucket-game-of-life'
+        AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+        AWS_REGION: 'eu-central-1'   # optional: defaults to us-east-1
+        SOURCE_DIR: 'public'      # optional: defaults to entire repository
