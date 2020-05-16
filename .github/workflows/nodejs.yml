@@ -20,15 +20,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build
+    - name: Setup
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
+    - name: Install
+      run: npm ci
+    - name: Build
+      run: npm run build --if-present
     - name: Test
-    - run: npm test
-    - run: npm run lint
+      run: npm test
+    - name: Lint
+      run: npm run lint
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
