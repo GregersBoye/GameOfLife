@@ -28,17 +28,22 @@ jobs:
       run: npm ci
     - name: Build
       run: npm run build --if-present
-    - name: Test
-      run: npm test
-    - name: Lint
-      run: npm run lint
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
         name: GOL
         path: dist/*
-    - name: Repository Dispatch
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.REPO_TOKEN }}
-        event-type: done_building
+  test: 
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps: 
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: GOL
+      - name: Test
+        run: npm run test
+      - name: Lint
+        run: npm run lint
