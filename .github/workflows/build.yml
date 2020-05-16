@@ -35,6 +35,7 @@ jobs:
         path: dist/*
   test: 
     runs-on: ubuntu-latest
+    needs: build
     strategy:
       matrix:
         node-version: [14.x]
@@ -45,5 +46,16 @@ jobs:
           name: GOL
       - name: Test
         run: npm run test
-      - name: Lint
+  lint:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps: 
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: GOL
+      - name: Test
         run: npm run lint
