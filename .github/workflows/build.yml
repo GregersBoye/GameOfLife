@@ -37,3 +37,8 @@ jobs:
       with:
         name: GOL
         path: dist/*
+    - name: Repository Dispatch
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.REPO_TOKEN }}
+        event: done_building
