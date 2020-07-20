@@ -45,7 +45,7 @@
   "dependencies": {
     "@types/lodash": "^4.14.151",
     "bulma": "^0.8.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "pixi.js": "^5.2.4"
   }
 }
